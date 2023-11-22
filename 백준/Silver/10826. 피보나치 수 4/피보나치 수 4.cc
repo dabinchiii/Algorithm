@@ -6,8 +6,8 @@ using namespace std;
 string dp[MAX_N + 1];
 
 void add(int pos, string a, string b){
-    while(a.length() < b.length()) a += '0';
-    while(a.length() > b.length()) b += '0';
+    while(a.length() < b.length()) a.push_back('0');
+    while(a.length() > b.length()) b.push_back('0');
 
     string result = "";
     int curr, carry = 0, value;
@@ -16,10 +16,11 @@ void add(int pos, string a, string b){
         carry = curr / 10;
         value = curr % 10;
 
-        result += to_string(value);
+        char ch = '0' + value;
+        result.push_back(ch);
     }
 
-    if(carry) result += "1";
+    if(carry) result.push_back('1');
 
     dp[pos] = result;
 }
