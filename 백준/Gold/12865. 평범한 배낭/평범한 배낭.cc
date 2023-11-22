@@ -13,23 +13,21 @@ int main(){
     int n, k;
     cin >> n >> k;
 
-    vector<stuff> stuffArr(n + 1);
-    for(int i=1; i<=n; i++){
+    vector<stuff> stuffArr(n);
+    for(int i=0; i<n; i++){
         cin >> stuffArr[i].w >> stuffArr[i].v;
     }
 
-    vector<vector<int>> dp(n + 1, vector<int>(k + 1, 0));
+    vector<int> dp(k+1, 0);
 
-    for(int i=1; i<=n; i++){
-        for(int j=1; j<=k; j++){
-            dp[i][j] = dp[i-1][j];
-
-            if(j - stuffArr[i].w < 0) continue;
-            dp[i][j] = max(dp[i][j], dp[i-1][j - stuffArr[i].w] + stuffArr[i].v);
+    for(stuff curr : stuffArr){
+        for(int i=k; i>=1; i--){
+            if(i - curr.w < 0) continue;
+            dp[i] = max(dp[i], dp[i - curr.w] + curr.v);
         }
     }
 
-    cout << dp[n][k];
+    cout << dp[k];
 
     return 0;
 }
