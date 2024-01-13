@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-
+#define INF 300000000
 using namespace std;
 
 int main(){
@@ -16,7 +16,7 @@ int main(){
         }
     }
 
-    vector<vector<int>> cost(n + 1, vector<int>(n + 1, -1));
+    vector<vector<int>> cost(n + 1, vector<int>(n + 1, INF));
     cost[1][1] = 0;
     for(int i=1; i<=n; i++){
         for(int j=1; j<=n; j++){
@@ -34,8 +34,7 @@ int main(){
                     fromTop += arr[i][j] - arr[i - 1][j] + 1;
                 }
 
-                if(cost[i][j] == -1) cost[i][j] = fromTop;
-                else cost[i][j] = min(cost[i][j], fromTop);
+                cost[i][j] = min(cost[i][j], fromTop);
             }
         }
     }
