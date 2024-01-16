@@ -1,5 +1,5 @@
 #include <bits/stdc++.h>
-#define NEG_INF -50000000000000
+#define NEG_INF -50000000
 #define MAX_N 50
 
 using namespace std;
