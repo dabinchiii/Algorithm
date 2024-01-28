@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 #define MAX_N 50
-#define INF 500
+#define INF 50
 
 using namespace std;
 
