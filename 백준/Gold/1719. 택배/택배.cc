@@ -1,74 +1,47 @@
 #include <bits/stdc++.h>
-#define MAX_N 200
-#define INF 2000000
+#define INF 200000
 
 using namespace std;
 
-int n, m;
-vector<vector<int>> weight(MAX_N + 1, vector<int>(MAX_N + 1, INF));
-
-vector<int> dijkstra(int start){
-    vector<bool> visited(n + 1, false);
-    vector<int> dis, first(n + 1, 0);
-
-    dis = weight[start];
-    for(int i=1; i<=n; i++){
-        if(dis[i] != INF && i != start){
-            first[i] = i;
-        }
-    }
-    visited[start] = true;
-
-    for(int i=0; i<n - 1; i++){
-        int minValue = INF, minNode = -1;
-        for(int j=1; j<=n; j++){
-            if(visited[j]) continue;
-            if(dis[j] < minValue){
-                minNode = j;
-                minValue = dis[j];
-            }
-        }
-
-        visited[minNode] = true;
-        for(int j=1; j<=n; j++){
-            if(visited[j]) continue;
-
-            if(dis[j] > dis[minNode] + weight[minNode][j]){
-                dis[j] = dis[minNode] + weight[minNode][j];
-                first[j] = first[minNode];
-            }
-        }
-    }
-
-    return first;
-}
 
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
 
+    int n, m;
     cin >> n >> m;
 
-    for(int i=1; i<=n; i++){
-        weight[i][i] = 0;
-    }
+    vector<vector<int>> w(n + 1, vector<int>(n + 1, INF));
+    for(int i=1; i<=n; i++) w[i][i] = 0;
 
-    int u, v, w;
+    int a, b, c;
     for(int i=0; i<m; i++){
-        cin >> u >> v >> w;
-        weight[u][v] = weight[v][u] = w;
+        cin >> a >> b >> c;
+        w[a][b] = w[b][a] = c;
     }
 
-    vector<vector<int>> Answer(n + 1);
+    vector<vector<int>> first(n + 1, vector<int>(n + 1));
     for(int i=1; i<=n; i++){
-        Answer[i] = dijkstra(i);
+        for(int j=1; j<=n; j++){
+            first[i][j] = j;
+        }
+    }
+
+    vector<vector<int>> dis = w;
+    for(int k=1; k<=n; k++){
+        for(int i=1; i<=n; i++){
+            for(int j=1; j<=n; j++){
+                if(dis[i][j] <= dis[i][k] + dis[k][j]) continue;
+                dis[i][j] = dis[i][k] + dis[k][j];
+                first[i][j] = first[i][k];
+            }
+        }
     }
 
     for(int i=1; i<=n; i++){
         for(int j=1; j<=n; j++){
-            if(i == j) cout << '-';
-            else cout << Answer[i][j];
-            cout << ' ';
+            if(i == j) cout << "- ";
+            else cout << first[i][j] << ' ';
         }
         cout << '\n';
     }
