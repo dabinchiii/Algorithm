@@ -6,16 +6,15 @@ using namespace std;
 int v, e;
 vector<pair<int, int>> g[MAX_V + 1];
 
-
 int prim(){
     priority_queue<pair<int, int>> q;
     bool visited[v + 1];
     int cost = 0;
-    
+
     for(int i=1; i<=v; i++){
         visited[i] = false;
     }
-    
+
     q.push({0, 1});
 
     while(!q.empty()){
@@ -24,7 +23,6 @@ int prim(){
         q.pop();
 
         if(visited[u]) continue;
-        
         visited[u] = true;
         cost += w;
 
