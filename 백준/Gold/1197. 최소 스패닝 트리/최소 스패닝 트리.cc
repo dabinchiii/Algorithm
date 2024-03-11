@@ -13,13 +13,6 @@ int findParent(int x){
     return parent[x] = findParent(parent[x]);
 }
 
-int sameParent(int x, int y){
-    x = findParent(x);
-    y = findParent(y);
-
-    return x == y;
-}
-
 void makeUnion(int x, int y){
     x = findParent(x);
     y = findParent(y);
@@ -39,7 +32,7 @@ void kruskal(){
     for(int i=0; i<e; i++){
         int u = edges[i].second.first;
         int v = edges[i].second.second;
-        if(sameParent(u, v)) continue;
+        if(findParent(u) == findParent(v)) continue;
 
         makeUnion(u, v);
         Answer += edges[i].first;
