@@ -4,34 +4,46 @@
 using namespace std;
 
 int v, e;
-vector<pair<int, int>> g[MAX_V + 1];
+vector<pair<int, pair<int, int>>> edges;
+int parent[MAX_V + 1];
+int Answer;
 
-int prim(){
-    priority_queue<pair<int, int>> q;
-    bool visited[v + 1];
-    int cost = 0;
+int findParent(int x){
+    if(parent[x] == x) return x;
+    return parent[x] = findParent(parent[x]);
+}
+
+int sameParent(int x, int y){
+    x = findParent(x);
+    y = findParent(y);
+
+    return x == y;
+}
+
+void makeUnion(int x, int y){
+    x = findParent(x);
+    y = findParent(y);
+
+    parent[y] = x;
+
+    return;
+}
+
+void kruskal(){
+    sort(edges.begin(), edges.end());
 
     for(int i=1; i<=v; i++){
-        visited[i] = false;
+        parent[i] = i;
     }
 
-    q.push({0, 1});
+    for(int i=0; i<e; i++){
+        int u = edges[i].second.first;
+        int v = edges[i].second.second;
+        if(sameParent(u, v)) continue;
 
-    while(!q.empty()){
-        int u = q.top().second;
-        int w = -q.top().first;
-        q.pop();
-
-        if(visited[u]) continue;
-        visited[u] = true;
-        cost += w;
-
-        for(pair<int, int> nxt : g[u]){
-            q.push({-nxt.second, nxt.first});
-        }
+        makeUnion(u, v);
+        Answer += edges[i].first;
     }
-
-    return cost;
 }
 
 int main(){
@@ -43,11 +55,12 @@ int main(){
     int a, b, c;
     for(int i=0; i<e; i++){
         cin >> a >> b >> c;
-        g[a].push_back({b, c});
-        g[b].push_back({a, c});
+        edges.push_back({c, {a, b}});
     }
 
-    cout << prim();
+    kruskal();
+
+    cout << Answer;
 
     return 0;
 }
