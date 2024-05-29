@@ -1,31 +1,36 @@
 #include <bits/stdc++.h>
-#define MAX_N 15
+#define MAX_N 14
 
 using namespace std;
 
-int n, Answer;
-vector<int> row(MAX_N);
+int n;
+bool col[MAX_N];
+bool cross1[2 * MAX_N - 1]; // 오른쪽 아래로 향하는 사선
+bool cross2[2 * MAX_N - 1]; // 오른쪽 위로 향하는 사선
+int ans;
 
-bool check(int r){
-    for(int i=0; i<r; i++){
-        if(row[i] == row[r]) return false;
-        if(abs(row[r] - row[i]) == r - i) return false;
-    }
-    return true;
-}
-
-void nqueen(int cnt){
+void bt(int cnt){
     if(cnt == n){
-        Answer++;
+        ans++;
         return;
     }
 
-    for(int i=0; i<n; i++){
-        row[cnt] = i;
+    int currLow = cnt + 1;
 
-        if(!check(cnt)) continue;
-        nqueen(cnt + 1);
+    for(int currCol=0; currCol<n; currCol++){
+        int currCross1 = (currLow - currCol) + n - 1;
+        int currCross2 = currLow + currCol;
+
+        if(col[currCol]) continue;
+        if(cross1[currCross1]) continue;
+        if(cross2[currCross2]) continue;
+
+        col[currCol] = cross1[currCross1] = cross2[currCross2] = true;
+        bt(cnt + 1);
+        col[currCol] = cross1[currCross1] = cross2[currCross2] = false;
     }
+
+    return;
 }
 
 int main(){
@@ -34,9 +39,9 @@ int main(){
 
     cin >> n;
 
-    nqueen(0);
+    bt(0);
 
-    cout << Answer;
+    cout << ans;
 
     return 0;
 }
