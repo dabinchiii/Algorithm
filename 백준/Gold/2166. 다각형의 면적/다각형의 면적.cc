@@ -3,7 +3,7 @@
 using namespace std;
 
 struct coord{
-    long double x, y;
+    long long x, y;
 };
 
 int n;
@@ -16,7 +16,7 @@ int main(){
 
     cin >> n;
 
-    long double x, y;
+    long long x, y;
     for(int i=0; i<n; i++){
         cin >> x >> y;
         v.push_back({x, y});
@@ -29,12 +29,12 @@ int main(){
 
         ans += (sumA - sumB) / 2;
     }
-    //ans = abs(ans);
+    ans = abs(ans);
 
     cout << fixed;
     cout.precision(1);
 
-    cout << abs(ans);
+    cout << ans;
 
     return 0;
 }
