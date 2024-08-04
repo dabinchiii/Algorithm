@@ -9,7 +9,7 @@ using namespace std;
 int n, m, x, y, k;
 int board[20][20];
 int dice[7];
-int top, bottom, r, l, up, down;
+int top, r, up;
 int currX, currY;
 
 // 1: 동, 2: 서, 3: 남, 4: 북
@@ -18,32 +18,20 @@ int dy[] = {0, 1, -1, 0, 0};
 
 void adjustDice(int comm){
     if(comm == EAST){
-        int tmp = top;
-        top = l;
-        l = bottom;
-        bottom = r;
-        r = tmp;
+        swap(top, r);
+        top = 7 - top;
     }
     else if(comm == WEST){
-        int tmp = top;
-        top = r;
-        r = bottom;
-        bottom = l;
-        l = tmp;
+        swap(top, r);
+        r = 7 - r;
     }
     else if(comm == NORTH){
-        int tmp = top;
-        top = down;
-        down = bottom;
-        bottom = up;
-        up = tmp;
+        swap(top, up);
+        top = 7 - top;
     }
     else if(comm == SOUTH){
-        int tmp = top;
-        top = up;
-        up = bottom;
-        bottom = down;
-        down = tmp;
+        swap(top, up);
+        up = 7 - up;
     }
 
     return;
@@ -59,10 +47,10 @@ void rollTheDice(int comm){
     adjustDice(comm);
 
     if(board[nxtX][nxtY] == 0){
-        board[nxtX][nxtY] = dice[bottom];
+        board[nxtX][nxtY] = dice[7 - top];
     }
     else{
-        dice[bottom] = board[nxtX][nxtY];
+        dice[7 - top] = board[nxtX][nxtY];
         board[nxtX][nxtY] = 0;
     }
 
@@ -87,11 +75,8 @@ int main(){
     }
 
     top = 1;
-    bottom = 6;
     r = 3;
-    l = 4;
     up = 2;
-    down = 5;
 
     currX = x;
     currY = y;
