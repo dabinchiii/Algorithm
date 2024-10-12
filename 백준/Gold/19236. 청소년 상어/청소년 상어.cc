@@ -89,18 +89,6 @@ bool isSharkBlocked(){
     return false;
 }
 
-void printBoard(){
-    cout << "=================\n";
-    for(int i=0; i<4; i++){
-        for(int j=0; j<4; j++){
-            fish curr = fishInfo[board[i][j]];
-            cout << board[i][j] << "." << curr.d << ' ';
-        }
-        cout << endl;
-    }
-
-}
-
 void bt(int x, int y, int currMax){
     vector<vector<int>> tmpBoard = board;
     vector<fish> tmpFishInfo = fishInfo;
@@ -148,8 +136,6 @@ void bt(int x, int y, int currMax){
 }
 
 void solve(){
-    //eatFish(0, 0);
-
     bt(0, 0, 0);
 
     return;
