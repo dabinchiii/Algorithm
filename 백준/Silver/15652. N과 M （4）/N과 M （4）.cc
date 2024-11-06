@@ -1,24 +1,30 @@
 #include <bits/stdc++.h>
-#define MAX_M 8
 
 using namespace std;
 
 int n, m;
-int ans[MAX_M];
+int arr[8];
 
-void bt(int cnt, int left){
+void dfs(int cnt, int left){
     if(cnt == m){
-        for(int i=0; i<m; i++){
-            cout << ans[i] << ' ';
-        }
+        for(int i=0; i<m; i++) cout << arr[i] << ' ';
         cout << '\n';
+
         return;
     }
 
     for(int i=left; i<=n; i++){
-        ans[cnt] = i;
-        bt(cnt + 1, i);
+        arr[cnt] = i;
+        dfs(cnt + 1, i);
     }
+
+    return;
+}
+
+void solve(){
+    dfs(0, 1);
+
+    return;
 }
 
 int main(){
@@ -27,7 +33,7 @@ int main(){
 
     cin >> n >> m;
 
-    bt(0, 1);
+    solve();
 
     return 0;
 }
