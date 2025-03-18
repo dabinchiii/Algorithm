@@ -46,14 +46,6 @@ void move(int d, int currCnt, vector<vector<int>> currBoard){
     auto backup = board;
     board = currBoard;
     
-    if(currCnt == 5){
-        ans = max(ans, findMax());
-        
-        board = backup;
-        
-        return;
-    }
-    
     if(d == UP){
         slideUp();
         mergeUp();
@@ -75,7 +67,13 @@ void move(int d, int currCnt, vector<vector<int>> currBoard){
         slideRight();
     }
     
-    
+    if(currCnt == 4){
+        ans = max(ans, findMax());
+        
+        board = backup;
+        
+        return;
+    }
     
     for(int i=0; i<4; i++){
         move(i, currCnt + 1, board);
@@ -90,7 +88,7 @@ void solve(){
     // ans: 최대 5번 이동해서 만들 수 있는 가장 큰 블록의 값
     
     for(int i=0; i<4; i++){
-        move(i, 0, initBoard);
+        move(i, 0, board);
     }
     
     return;
@@ -104,20 +102,10 @@ int main(){
             cin >> board[i][j];
         }
     }
-    initBoard = board;
     
     ans = -1;
     
     solve();
-    
-//    moveD(0);
-//    
-//    for(int i=0; i<n; i++){
-//        for(int j=0; j<n; j++){
-//            cout << board[i][j] << ' ';
-//        }
-//        cout << endl;
-//    }
     
     cout << ans;
     
