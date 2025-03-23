@@ -10,12 +10,7 @@ int sumA, sumB;
 int ans;
 
 void solve(){
-    bit a = bit(sumA);
-    bit b = bit(sumB);
-    
-    auto c = a ^ b;
-
-    ans = static_cast<int>(c.to_ulong());
+    ans = static_cast<int>((bit(sumA) ^ bit(sumB)).to_ulong());
     
     return;
 }
