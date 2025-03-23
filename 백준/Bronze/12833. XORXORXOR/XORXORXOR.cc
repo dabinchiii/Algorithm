@@ -1,18 +1,16 @@
-#include <bits/stdc++.h>
+#include <iostream>
+
 using namespace std;
 
 int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
-
     int a, b, c;
     cin >> a >> b >> c;
-
-    int Answer = a;
-    if(c % 2 == 1){
-        Answer ^= b;
-    }
-    cout << Answer;
-
+    
+    int ans = a;
+    
+    if(c % 2) ans ^= b;
+    
+    cout << ans;
+    
     return 0;
 }
