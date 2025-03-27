@@ -98,11 +98,11 @@ int tilt(int d){
         tiltRed(d);
     }
     
-//    if(blue == whole) return -1;
-//    if(red == whole) return 1;
+    if(blue == whole) return -1;
+    if(red == whole) return 1;
     
-    if(blue.x == whole.x && blue.y == whole.y) return -1;
-    if(red.x == whole.x && red.y == whole.y) return 1;
+//    if(blue.x == whole.x && blue.y == whole.y) return -1;
+//    if(red.x == whole.x && red.y == whole.y) return 1;
     
     return 0;
 }
@@ -167,26 +167,6 @@ int main(){
     }
     
     solve();
-    
-//    cout << tilt(2) << ' ';
-//    cout << tilt(1) << ' ';
-//    cout << tilt(3) << ' ';
-//    cout << tilt(1) << ' ';
-//    cout << tilt(2) << ' ';
-//    cout << endl;
-    
-//    tilt(2);
-//    tilt(1);
-
-//    board[red.x][red.y] = 'R';
-//    board[blue.x][blue.y] = 'B';
-//    cout << endl;
-//    for(int i=0; i<n; i++){
-//        for(int j=0; j<m; j++){
-//            cout << board[i][j];
-//        }
-//        cout << endl;
-//    }
     
     cout << ans;
     
