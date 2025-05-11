@@ -4,8 +4,8 @@
 using namespace std;
 
 int main(){
-    int r = 31;
-    int M = 1234567891;
+    long long r = 31;
+    long long M = 1234567891;
     
     int l;
     cin >> l;
@@ -13,11 +13,13 @@ int main(){
     string str;
     cin >> str;
     
-    int ans = 0;
+    long long ans = 0;
     
+    long long numR = 1;
     for(int i=0; i<l; i++){
-        ans += (str[i] - 'a' + 1) * pow(r, i);
+        ans += ((long long)(str[i] - 'a' + 1) * numR) % M;
         ans %= M;
+        numR = (numR * r) % M;
     }
     
     cout << ans;
