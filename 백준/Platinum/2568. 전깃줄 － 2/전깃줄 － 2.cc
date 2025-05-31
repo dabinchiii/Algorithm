@@ -5,8 +5,6 @@ using namespace std;
 
 int n;
 vector<pair<int, int>> arr;
-int maxNum;
-
 
 void solve(){
     sort(arr.begin(), arr.end());
@@ -26,8 +24,6 @@ void solve(){
             v.push_back({currVal, currIdx});
         }
         else{
-            // lower_bound(<#ForwardIterator first#>, <#ForwardIterator last#>, <#const Tp &value#>, <#Compare comp#>)
-            
             auto it = lower_bound(v.begin(), v.end(), make_pair(currVal, currIdx), [](const auto& a, const auto& b){
                 return a.first < b.first;
             });
@@ -48,7 +44,7 @@ void solve(){
         visited[currIdx] = true;
         currIdx = before[currIdx];
     }
-//    
+ 
     cout << n - (int)v.size() << '\n';
     for(int i=0; i<n; i++){
         if(!visited[i]) cout << arr[i].first << '\n';
@@ -64,8 +60,6 @@ int main(){
     for(int i=0; i<n; i++){
         cin >> a >> b;
         arr.push_back({a, b});
-        
-        maxNum = max(maxNum, max(a, b));
     }
     
     solve();
