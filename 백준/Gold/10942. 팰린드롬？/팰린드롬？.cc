@@ -14,14 +14,10 @@ int main(){
     cin >> n;
     for(int i=1; i<=n; i++) cin >> arr[i];
     
+    vector<vector<bool>> dp(n + 1, vector<bool>(n + 1, true));
     
-//    vector<vector<bool>> dp(n + 1, vector<bool>(n + 1, true));
-    vector<vector<int>> dp(n + 1, vector<int>(n + 1, -1));
-    
-    for(int i=1; i<=n; i++) dp[i][i] = 1;
     for(int i=1; i<n; i++){
-        int x = i, y = i + 1;
-        dp[x][y] = (arr[x] == arr[y]) ? 1 : 0;
+        if(arr[i] != arr[i + 1]) dp[i][i + 1] = false;
     }
     
     for(int i=2; i<=n - 1; i++){
@@ -30,14 +26,9 @@ int main(){
             
             if(y > n) break;
             
-            if(arr[x] == arr[y] && dp[x + 1][y - 1] == 1){
-                dp[x][y] = 1;
+            if(arr[x] != arr[y] || !dp[x + 1][y - 1]){
+                dp[x][y] = false;
             }
-            else{
-                dp[x][y] = 0;
-            }
-            
-            
         }
     }
     
@@ -47,7 +38,7 @@ int main(){
     int s, e;
     for(int i=0; i<m; i++){
         cin >> s >> e;
-        cout << dp[s][e] << '\n';
+        cout << (dp[s][e] ? 1 : 0) << '\n';
     }
     
     return 0;
