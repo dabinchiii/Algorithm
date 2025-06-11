@@ -2,7 +2,7 @@
 #include <vector>
 #include <queue>
 
-#define INF 1000000000
+#define INF 100000000
 
 using namespace std;
 
@@ -48,10 +48,7 @@ void solve(){
                 dist[nxtV][nxtC] = nxtT;
                 q.push({nxtV, nxtT, nxtC});
             }
-            
         }
-        
-        
     }
     
     int minC = INF;
