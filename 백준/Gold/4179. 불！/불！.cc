@@ -52,9 +52,7 @@ void spreadFire() {
 	return;
 }
 void solve() {
-
 	ans = -1;
-	while (!fire.empty()) fire.pop();
 
 	cin >> h >> w;
 
@@ -86,7 +84,7 @@ void solve() {
 		int cnt = q.front().second;
 		q.pop();
 
-		if (t < cnt) {
+		if (t != cnt) {
 			spreadFire();
 			t = cnt;
 
