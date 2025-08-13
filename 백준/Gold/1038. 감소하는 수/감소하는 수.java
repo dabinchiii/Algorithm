@@ -32,9 +32,10 @@ public class Main {
 			ans = 0;
 			return;
 		}
-//		if(n > 1024) {
-//			
-//		}
+		if(n > 1022) {
+			ans = -1;
+			return;	
+		}
 		
 		ans = -1L;
 		count = 0;
