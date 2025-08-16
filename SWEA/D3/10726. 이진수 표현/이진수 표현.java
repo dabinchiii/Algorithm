@@ -34,15 +34,8 @@ public class Solution {
 	}
     
     static void solve() {
-    	int curr = M;
-    	for(int i=0; i<N; i++) {
-    		if((curr & 1) != 1) {
-    			ans = "OFF";
-    			return;
-    		}
-    		curr >>= 1;
-    	}
-    	ans = "ON";
-    	return;
+    	int tmp = (1 << N) - 1;
+    	if((M & tmp) == tmp) ans = "ON";
+    	else ans = "OFF";
     }
 }
