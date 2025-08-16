@@ -12,7 +12,6 @@ public class Solution {
     static StringTokenizer st;
     
     static int N, M;
-    static String ans;
     
     public static void main(String[] args) throws IOException {
     	int T;
@@ -22,10 +21,9 @@ public class Solution {
     		N = Integer.parseInt(st.nextToken());
     		M = Integer.parseInt(st.nextToken());
     		
-    		solve();
-    		
-    		bw.write("#" + t + " " + ans + "\n");
-    		
+    		int x = (1 << N) - 1;
+        	if((M & x) == x) bw.write("#" + t + " " + "ON" + "\n");
+        	else bw.write("#" + t + " " + "OFF" + "\n");
     	}
     	bw.flush();
     	bw.close();
@@ -33,9 +31,4 @@ public class Solution {
     	return;
 	}
     
-    static void solve() {
-    	int tmp = (1 << N) - 1;
-    	if((M & tmp) == tmp) ans = "ON";
-    	else ans = "OFF";
-    }
 }
