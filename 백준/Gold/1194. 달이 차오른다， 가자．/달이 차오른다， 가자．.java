@@ -20,7 +20,7 @@ public class Main {
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
 	
-	static int[] keyValue = {1, 10, 100, 1000, 10000, 100000, 1000000};
+//	static int[] keyValue = {1, 10, 100, 1000, 10000, 100000, 1000000};
 	
 	public static void main(String[] args) throws IOException{
 		st = new StringTokenizer(br.readLine());
@@ -90,7 +90,8 @@ public class Main {
 				if(board[nr][nc] >= 'a' && board[nr][nc] <= 'f') { // 열쇠
 					int idx = board[nr][nc] - 'a';
 					if(!hasKey(k, idx)) {
-						nk += keyValue[idx];
+//						nk += keyValue[idx];
+						nk |= (1 << idx);
 					}
 				}
 				
@@ -104,7 +105,8 @@ public class Main {
 		return;
 	}
 	static boolean hasKey(int value, int idx) {
-		return (value / keyValue[idx]) % 10 == 1;
+//		return (value / keyValue[idx]) % 10 == 1;
+		return ((value & (1 << idx)) != 0 );
 	}
 	static boolean check(int r, int c) {
 		return r >= 0 && r < n && c >= 0 && c < m;
