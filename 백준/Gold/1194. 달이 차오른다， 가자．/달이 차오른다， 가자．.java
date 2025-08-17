@@ -20,8 +20,6 @@ public class Main {
 	static int[] dr = {-1, 1, 0, 0};
 	static int[] dc = {0, 0, -1, 1};
 	
-//	static int[] keyValue = {1, 10, 100, 1000, 10000, 100000, 1000000};
-	
 	public static void main(String[] args) throws IOException{
 		st = new StringTokenizer(br.readLine());
 		n = Integer.parseInt(st.nextToken());
@@ -51,16 +49,10 @@ public class Main {
 		ans = -1;
 		
 		Queue<int[]> que = new LinkedList<>();
-		ArrayList<Integer>[][] visited = new ArrayList[n][m];
-		
-		for(int i=0; i<n; i++) {
-			for(int j=0; j<m; j++) {
-				visited[i][j] = new ArrayList<>();
-			}
-		}
+		boolean[][][] visited = new boolean[n][m][64];
 		
 		que.offer(new int[] {sr, sc, 0, 0});
-		visited[sr][sc].add(0);
+		visited[sr][sc][0] = true;
 		
 		while(!que.isEmpty()) {
 			int[] curr = que.poll();
@@ -85,28 +77,23 @@ public class Main {
 				
 				if(board[nr][nc] >= 'A' && board[nr][nc] <= 'Z') { // 문
 					int idx = board[nr][nc] - 'A';
-					if(!hasKey(k, idx)) continue; // 열쇠없음
+					if((k & (1 << idx)) == 0) continue; // 열쇠없음
 				}
 				if(board[nr][nc] >= 'a' && board[nr][nc] <= 'f') { // 열쇠
 					int idx = board[nr][nc] - 'a';
-					if(!hasKey(k, idx)) {
-//						nk += keyValue[idx];
+					if((k & (1 << idx)) == 0) {
 						nk |= (1 << idx);
 					}
 				}
 				
-				if(visited[nr][nc].contains(nk)) continue;
+				if(visited[nr][nc][nk]) continue;
 				
 				que.offer(new int[] {nr, nc, nt, nk});
-				visited[nr][nc].add(nk);
+				visited[nr][nc][nk] = true;
 			}
 		}
 		
 		return;
-	}
-	static boolean hasKey(int value, int idx) {
-//		return (value / keyValue[idx]) % 10 == 1;
-		return ((value & (1 << idx)) != 0 );
 	}
 	static boolean check(int r, int c) {
 		return r >= 0 && r < n && c >= 0 && c < m;
