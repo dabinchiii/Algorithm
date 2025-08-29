@@ -17,23 +17,16 @@ int dc[] = {0, 0, -1, 1};
 struct boomNode {
 	int r, c, left;
 };
-int countRemain(vector<vector<int>> &map) {
-	int count = 0;
-	for (int r = 0; r < H; r++) {
-		for (int c = 0; c < W; c++) {
-			if (map[r][c] != 0) count++;
-		}
-	}
 
-	return count;
-}
-void boom(int sr, int sc, vector<vector<int>> &map) {
+int boom(int sr, int sc, vector<vector<int>> &map) { // 깨진 벽돌 수 리턴
+	int cnt = 0;
 	queue<boomNode> q;
 
 	if (map[sr][sc] > 1) {
 		q.push({ sr, sc, map[sr][sc] - 1 });
 	}
 	map[sr][sc] = 0;
+	cnt++;
 
 	while (!q.empty()) {
 		boomNode curr = q.front();
@@ -52,12 +45,13 @@ void boom(int sr, int sc, vector<vector<int>> &map) {
 					q.push({ nr, nc, map[nr][nc] - 1 });
 				} // 1이면 지금 뿌시고 끝
 				map[nr][nc] = 0;
+				cnt++;
 			}
 		}
 		
 	}
 
-	return;
+	return cnt;
 }
 void down(vector<vector<int>> &map) {
 	for (int c = 0; c < W; c++) {
@@ -78,15 +72,13 @@ void down(vector<vector<int>> &map) {
 	}
 	return;
 }
-void drop(int count, vector<vector<int>> &map) { // 중복순열. 주어진 board에 대하여, 구슬을 0~W 열에서 낙하시킴
-	int remainCnt = countRemain(map);
-
+void drop(int count, int remainCnt, vector<vector<int>> &map) { // 중복순열. 주어진 board에 대하여, 구슬을 0~W 열에서 낙하시킴
 	if (remainCnt == 0) {
 		ans = 0;
 		return;
 	}
 	if (count == N) { // 만약 구슬을 N번 낙하시키기 전에 모든 벽돌이 다 제거되면, 감지하지 못하는 문제 => 현재 남아있는 벽돌 수 체크
-		ans = min(ans, countRemain(map));
+		ans = min(ans, remainCnt);
 		return;
 	}
 
@@ -97,9 +89,9 @@ void drop(int count, vector<vector<int>> &map) { // 중복순열. 주어진 boar
 		if (r == H) continue; // 빈 열
 
 		vector<vector<int>> newMap(map);
-		boom(r, c, newMap);
+		int cnt = boom(r, c, newMap);
 		down(newMap); // 중력 작용
-		drop(count + 1, newMap);
+		drop(count + 1, remainCnt - cnt, newMap);
 
 	}
 	
@@ -113,15 +105,17 @@ int main() {
 
 		vector<vector<int>> map(H, vector<int>(W));
 
+		int totalCnt = 0;
 		for (int i = 0; i < H; i++) {
 			for (int j = 0; j < W; j++) {
 				cin >> map[i][j];
+				if (map[i][j] > 0) totalCnt++;
 			}
 		}
 
 		ans = H * W;
 
-		drop(0, map);
+		drop(0, totalCnt, map);
 
 		cout << '#' << tc << ' ' << ans << '\n';
 	}
