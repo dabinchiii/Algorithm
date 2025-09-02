@@ -1,68 +1,97 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+
 #define MAX_N 500
 using namespace std;
 
 int n, m;
-vector<vector<int>> taller(MAX_N + 1);
-vector<vector<int>> shorter(MAX_N + 1);
-int Answer;
+vector<int> taller[MAX_N + 1];
+vector<int> shorter[MAX_N + 1];
+int ans;
 
-void solve(int target){
-    vector<bool> visited(n+1, false);
-    int cnt = 0;
+int q[MAX_N + 1];
+int head, tail;
 
-    queue<int> q;
-    q.push(target);
-    visited[target] = true;
+void check(int target) {
+	head = tail = 0;
+	vector<bool> visited(n + 1, false);
+	int cnt = 0;
 
-    while(!q.empty()){
-        int curr = q.front();
-        q.pop();
+	//q.push(target);
+	q[tail++] = target;
+	visited[target] = true;
 
-        for(int nxt : taller[curr]){
-            if(!visited[nxt]){
-                visited[nxt] = true;
-                cnt++;
-                q.push(nxt);
-            }
-        }
-    }
+	while (head != tail) {
+		//int curr = q.front();
+		//q.pop();
+		int curr = q[head++];
 
-    q.push(target);
-    while(!q.empty()){
-        int curr = q.front();
-        q.pop();
+		for (int nxt : taller[curr]) {
+			if (!visited[nxt]) {
+				visited[nxt] = true;
+				cnt++;
+				//q.push(nxt);
+				q[tail++] = nxt;
+			}
+		}
+	}
 
-        for(int nxt : shorter[curr]){
-            if(!visited[nxt]){
-                visited[nxt] = true;
-                cnt++;
-                q.push(nxt);
-            }
-        }
-    }
+	head = tail = 0;
+	//q.push(target);
+	q[tail++] = target;
+	while (head != tail) {
+		//int curr = q.front();
+		//q.pop();
+		int curr = q[head++];
 
-    if(cnt == n - 1) Answer++;
+		for (int nxt : shorter[curr]) {
+			if (!visited[nxt]) {
+				visited[nxt] = true;
+				cnt++;
+				//q.push(nxt);
+				q[tail++] = nxt;
+			}
+		}
+	}
+
+	if (cnt == n - 1) ans++;
 }
 
-int main(){
-    ios_base::sync_with_stdio(false);
-    cin.tie(NULL);
+void solve() {
+	ans = 0;
+	for (int i = 1; i <= n; i++) {
+		check(i);
+	}
+	return;
+}
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
 
-    cin >> n >> m;
+	//int T;
+	//cin >> T;
+	//for (int tc = 1; tc <= T; tc++) {
+		cin >> n >> m;
 
-    int a, b;
-    for(int i=0; i<m; i++){
-        cin >> a >> b;
-        taller[a].push_back(b);
-        shorter[b].push_back(a);
-    }
+		for (int i = 1; i <= n; i++) {
+			taller[i].clear();
+			shorter[i].clear();
+		}
 
-    for(int i=1; i<=n; i++){
-        solve(i);
-    }
+		int a, b;
+		for (int i = 0; i < m; i++) {
+			cin >> a >> b;
+			taller[a].push_back(b);
+			shorter[b].push_back(a);
+		}
 
-    cout << Answer;
+		solve();
 
-    return 0;
+		//cout << "#" << tc << " " << ans << '\n';
+		cout << ans;
+	//}
+	
+
+	return 0;
 }
