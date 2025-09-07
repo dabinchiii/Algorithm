@@ -20,7 +20,7 @@ ll makeTree(int treeIdx, int start, int end){
     
     return tree[treeIdx] = leftRes + rightRes;
 }
-void update(int treeIdx, int start, int end, int idx, ll diff){
+void update(int treeIdx, int start, int end, int &idx, ll &diff){
     if(start > idx || end < idx) return; // 완전 벗어난 범위. start~end에 idx가 포함되지 않음
     
     // 어쨋든 범위 내에 있는 거라면, 영향을 받아서 sum이 diff만큼 증가한다.
@@ -34,7 +34,7 @@ void update(int treeIdx, int start, int end, int idx, ll diff){
     
     return;
 }
-ll getSum(int treeIdx, int left, int right, int start, int end){
+ll getSum(int treeIdx, int &left, int &right, int start, int end){
     if(right < start || left > end){ // 완전히 범위에서 벗어남
         return 0;
     }
@@ -58,17 +58,25 @@ int main(){
     
     makeTree(1, 0, N - 1);
     
-    int a, b;
-    ll c;
+    int a;
     for(int i=0; i<M + K; i++){
-        cin >> a >> b >> c;
+        cin >> a;
         
         if(a == 1){ // b번째 수를 c로 바꿈
-            update(1, 0, N - 1, b - 1, c - arr[b - 1]);
-            arr[b - 1] = c;
+            int b;
+            ll c;
+            cin >> b >> c;
+            b--;
+            ll diff = c - arr[b];
+            arr[b] = c;
+            update(1, 0, N - 1, b, diff);
         }
         else{ // b번째 수부터 c번째 수의 합 출력
-            cout << getSum(1, b - 1, c - 1, 0, N - 1) << '\n';
+            int b, c;
+            cin >> b >> c;
+            b--;
+            c--;
+            cout << getSum(1, b, c, 0, N - 1) << '\n';
         }
     }
     
