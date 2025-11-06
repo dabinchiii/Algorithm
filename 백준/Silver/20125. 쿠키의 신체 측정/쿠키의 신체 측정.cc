@@ -12,16 +12,6 @@ int dc[] = {0, 0, -1, 1};
 int N;
 bool board[1002][1002];
 
-loc findHeart(){
-    for(int i=2; i<N; i++){
-        for(int j=2; j<N; j++){
-            if(board[i][j] && board[i - 1][j] && board[i + 1][j] && board[i][j - 1] && board[i][j + 1]){
-                return {i, j};
-            }
-        }
-    }
-    return {-1, -1};
-}
 int cntLen(loc start, int d){
     int nr = start.r, nc = start.c;
     int cnt = 0;
@@ -40,15 +30,16 @@ int main(){
     cin >> N;
     
     string line;
+    loc heart = {-1, -1};
     for(int i=1; i<=N; i++){
         cin >> line;
         
         for(int j=1; j<=N; j++){
             board[i][j] = line[j - 1] == '*';
+            if(heart.r == -1 && board[i - 1][j]) heart = {i, j};
         }
     }
     
-    loc heart = findHeart();
     int leftArm = cntLen(heart, 2);
     int rightArm = cntLen(heart, 3);
     int waist = cntLen(heart, 1);
