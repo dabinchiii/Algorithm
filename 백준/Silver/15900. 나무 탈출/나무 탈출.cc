@@ -11,6 +11,9 @@ vector<int> g[MAX_N + 1];
 
 // 각각의 말들은 {처음 위치한 리프 노드의 depth}번씩 움질일 수 있다.
 int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
     cin >> N;
     
     int u, v;
