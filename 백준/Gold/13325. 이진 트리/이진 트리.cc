@@ -5,8 +5,7 @@
 using namespace std;
 
 int K;
-int w[1 << 22], cw[1 << 22];
-int last;
+int w[1 << 21];
 long long ans;
 
 void solve(){
@@ -18,19 +17,16 @@ void solve(){
         for(int i=0; i<start; i+=2){
             int left = start + i;
             int right = left + 1;
-            int maxV = max(w[left] + cw[left], w[right] + cw[right]);
-            cw[left >> 1] = maxV;
+            int maxV = max(w[left], w[right]);
             
-            w[left] = maxV - cw[left];
-            w[right] = maxV - cw[right];
+            w[left >> 1] += maxV;
+            w[1] += maxV;
         }
         
         --currDepth;
     }
     
-    for(int i=2; i<=last; i++){
-        ans += w[i];
-    }
+    ans = w[1];
     
     return;
 }
@@ -40,10 +36,9 @@ int main(){
     
     cin >> K;
     
-    last = (1 << (K + 1)) - 1;
+    int last = (1 << (K + 1)) - 1;
     for(int i=2; i<=last; i++){
         cin >> w[i];
-        w[1] += w[i];
     }
     
     solve();
