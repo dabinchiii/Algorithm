@@ -19,7 +19,7 @@ long long solution(int n, vector<int> _times) {
     long long left = 1, right = 1000000000000000000;
     long long ans = right;
     while(left <= right){
-        long long mid = left + ((right - left) / 2);
+        long long mid = left + ((right - left) >> 1);
         if(check(mid)){
             ans = mid;
             right = mid - 1;
