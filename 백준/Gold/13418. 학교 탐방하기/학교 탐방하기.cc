@@ -8,7 +8,7 @@ using namespace std;
 
 int N, M;
 int entCost;
-vector<pair<int, pair<int, int>>> edges;
+vector<pair<int, int>> edges_down, edges_up;
 int parent[MAX_N + 1];
 long long ans;
 
@@ -36,9 +36,10 @@ long long getWorst(){
     
     makeSet();
     
-    for(int i=M - 1; i>=0 && cnt < N - 1; i--){
-        if(makeUnion(edges[i].second.first, edges[i].second.second)){
-            cost += edges[i].first;
+    for(auto curr : edges_up){
+        if(cnt >= N - 1) break;
+        if(makeUnion(curr.first, curr.second)){
+            ++cost;
             ++cnt;
         }
     }
@@ -52,9 +53,16 @@ long long getBest(){
     
     makeSet();
     
-    for(int i=0; i<M && cnt < N - 1; i++){
-        if(makeUnion(edges[i].second.first, edges[i].second.second)){
-            cost += edges[i].first;
+    for(auto curr : edges_down){
+        if(cnt >= N - 1) break;
+        if(makeUnion(curr.first, curr.second)){
+            ++cnt;
+        }
+    }
+    for(auto curr : edges_up){
+        if(cnt >= N - 1) break;
+        if(makeUnion(curr.first, curr.second)){
+            ++cost;
             ++cnt;
         }
     }
@@ -63,7 +71,6 @@ long long getBest(){
 }
 
 void solve(){
-    sort(edges.begin(), edges.end());
     ans = getWorst() - getBest();
     return;
 }
@@ -76,10 +83,11 @@ int main(){
     
     int a, b, c;
     cin >> a >> b >> c;
-    entCost = c == 0 ? 1 : 0;
+    entCost = !c;
     for(int i=0; i<M; i++){
         cin >> a >> b >> c;
-        edges.push_back({c == 0 ? 1 : 0, {a, b}});
+        if(c) edges_down.push_back({a, b});
+        else edges_up.push_back({a, b});
     }
     
     solve();
