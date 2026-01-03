@@ -11,7 +11,7 @@ using namespace std;
 
 int N, M, s, e;
 vector<pair<int, pair<int, int>>> edges;
-int parent[MAX_N + 1];
+int parent[MAX_N + 1], rnk[MAX_N + 1];
 int ans;
 
 void makeSet(){
@@ -19,13 +19,25 @@ void makeSet(){
 }
 int findRoot(int x){
     if(parent[x] == x) return x;
-    return parent[x] = findRoot(parent[x]);
+    return findRoot(parent[x]);
 }
 bool makeUnion(int a, int b){
     int rootA = findRoot(a);
     int rootB = findRoot(b);
+    
     if(rootA == rootB) return false;
-    parent[rootA] = rootB;
+    
+    if(rnk[rootA] < rnk[rootB]){
+        parent[rootA] = rootB;
+    }
+    else if(rnk[rootB] < rnk[rootA]){
+        parent[rootB] = rootA;
+    }
+    else{
+        parent[rootB] = rootA;
+        ++rnk[rootA];
+    }
+    
     return true;
 }
 bool isConnected(){
