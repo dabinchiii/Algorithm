@@ -11,24 +11,22 @@ struct node{
     int dist, u, v;
 };
 
-bool cmp(node &a, node &b){
+bool cmp(const node &a, const node &b){
     return a.dist < b.dist;
 }
 
 int N;
 int sd[MAX_N + 1][MAX_N + 1]; // 최단거리
-int adj[MAX_N + 1][MAX_N + 1];
+vector<pair<int, int>> adj[MAX_N + 1];
 vector<node> v;
-string ans;
 
 void solve(){
     sort(v.begin(), v.end(), cmp);
     
-    for(auto curr : v){
-        
+    for(auto &curr : v){
         bool flag = false;
-        for(int i=1; i<=N; i++){
-            if(adj[curr.u][i] > 0 && adj[curr.u][i] + sd[i][curr.v] == curr.dist){
+        for(auto &nxt : adj[curr.u]){
+            if(nxt.second + sd[nxt.first][curr.v] == curr.dist){
                 flag = true;
                 break;
             }
@@ -36,26 +34,19 @@ void solve(){
         
         if(flag) continue;
         
-        adj[curr.u][curr.v] = adj[curr.v][curr.u] = curr.dist;
+        adj[curr.u].push_back({curr.v, curr.dist});
+        adj[curr.v].push_back({curr.u, curr.dist});
     }
     
     ostringstream out;
     for(int i=1; i<=N; i++){
-        int cnt = 0;
-        
-        for(int j=1; j<=N; j++){
-            if(adj[i][j]) ++cnt;
-        }
-        
-        out << cnt << ' ';
-        
-        for(int j=1; j<=N; j++){
-            if(adj[i][j]) out << j << ' ';
-        }
+        out << adj[i].size() << ' ';
+        sort(adj[i].begin(), adj[i].end());
+        for(auto nxt : adj[i]) out << nxt.first << ' ';
         out << '\n';
     }
     
-    ans = out.str();
+    cout << out.str();
     
     return;
 }
@@ -76,8 +67,6 @@ int main(){
     }
     
     solve();
-    
-    cout << ans;
     
     return 0;
 }
