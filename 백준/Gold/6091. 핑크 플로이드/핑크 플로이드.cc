@@ -19,6 +19,7 @@ int N;
 int sd[MAX_N + 1][MAX_N + 1]; // 최단거리
 int adj[MAX_N + 1][MAX_N + 1];
 vector<node> v;
+string ans;
 
 void solve(){
     sort(v.begin(), v.end(), cmp);
@@ -43,12 +44,15 @@ void solve(){
         for(int j=1; j<=N; j++){
             if(adj[i][j]) q.push(j);
         }
-        cout << q.size() << ' ';
+        ans += to_string(q.size());
+        ans.push_back(' ');
+        
         while(!q.empty()){
-            cout << q.front() << ' ';
+            ans += to_string(q.front());
+            ans.push_back(' ');
             q.pop();
         }
-        cout << '\n';
+        ans.push_back('\n');
     }
     
     return;
@@ -71,6 +75,7 @@ int main(){
     
     solve();
     
+    cout << ans;
     
     return 0;
 }
