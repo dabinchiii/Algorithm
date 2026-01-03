@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include <queue>
+#include <algorithm>
 
 #define MAX_N 100000
 #define MAX_K 1000000
@@ -10,31 +10,43 @@
 using namespace std;
 
 int N, M, s, e;
-vector<pair<int, int>> g[MAX_N + 1];
+vector<pair<int, pair<int, int>>> edges;
+int parent[MAX_N + 1];
 int ans;
 
+void makeSet(){
+    for(int i=1; i<=N; i++) parent[i] = i;
+}
+int findRoot(int x){
+    if(parent[x] == x) return x;
+    return parent[x] = findRoot(parent[x]);
+}
+bool makeUnion(int a, int b){
+    int rootA = findRoot(a);
+    int rootB = findRoot(b);
+    if(rootA == rootB) return false;
+    parent[rootA] = rootB;
+    return true;
+}
+bool isConnected(){
+    int rootS = findRoot(s);
+    int rootE = findRoot(e);
+    return rootS == rootE;
+}
+
 void solve(){
-    priority_queue<pair<int, int>> pq; // max
-    vector<bool> visited(N + 1, false);
+    sort(edges.begin(), edges.end(), greater<>());
+    makeSet();
     
-    pq.push({MAX_K, s});
-    
-    while(!pq.empty()){
-        int currW = pq.top().first;
-        int currV = pq.top().second;
-        pq.pop();
-        
-        if(currV == e){
-            ans = currW;
-            return;
-        }
-        
-        if(visited[currV]) continue;
-        
-        visited[currV] = true;
-        
-        for(auto nxt : g[currV]){
-            if(!visited[nxt.first]) pq.push({min(currW, nxt.second), nxt.first});
+    int maxW = MAX_K;
+    for(auto curr : edges){
+        if(makeUnion(curr.second.first, curr.second.second)){
+            maxW = min(maxW, curr.first);
+            
+            if(isConnected()){
+                ans = maxW;
+                return;
+            }
         }
     }
     
@@ -50,8 +62,7 @@ int main(){
     int u, v, k;
     for(int i=0; i<M; i++){
         cin >> u >> v >> k;
-        g[u].push_back({v, k});
-        g[v].push_back({u, k});
+        edges.push_back({k, {u, v}});
     }
     
     solve();
