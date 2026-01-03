@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
-#include <queue>
+#include <sstream>
 
 #define MAX_N 1024
 
@@ -39,21 +39,23 @@ void solve(){
         adj[curr.u][curr.v] = adj[curr.v][curr.u] = curr.dist;
     }
     
-    queue<int> q;
+    ostringstream out;
     for(int i=1; i<=N; i++){
-        for(int j=1; j<=N; j++){
-            if(adj[i][j]) q.push(j);
-        }
-        ans += to_string(q.size());
-        ans.push_back(' ');
+        int cnt = 0;
         
-        while(!q.empty()){
-            ans += to_string(q.front());
-            ans.push_back(' ');
-            q.pop();
+        for(int j=1; j<=N; j++){
+            if(adj[i][j]) ++cnt;
         }
-        ans.push_back('\n');
+        
+        out << cnt << ' ';
+        
+        for(int j=1; j<=N; j++){
+            if(adj[i][j]) out << j << ' ';
+        }
+        out << '\n';
     }
+    
+    ans = out.str();
     
     return;
 }
