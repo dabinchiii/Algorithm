@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #define MAX_N 100000
+#define MAX_M 300000
 #define MAX_K 1000000
 
 using namespace std;
@@ -12,7 +13,7 @@ struct edgeNode{
 };
 
 int N, M, s, e;
-vector<edgeNode> edges;
+edgeNode edges[MAX_M];
 int parent[MAX_N + 1], rnk[MAX_N + 1];
 int ans;
 
@@ -48,7 +49,7 @@ bool makeUnion(int a, int b){
 }
 
 void solve(){
-    sort(edges.begin(), edges.end(), cmp);
+    sort(edges, edges + M, cmp);
     makeSet();
     
     for(auto curr : edges){
@@ -70,7 +71,7 @@ int main(){
     int u, v, k;
     for(int i=0; i<M; i++){
         cin >> u >> v >> k;
-        edges.push_back({k, u, v});
+        edges[i] = {k, u, v};
     }
     
     solve();
