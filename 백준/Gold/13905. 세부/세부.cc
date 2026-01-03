@@ -5,21 +5,27 @@
 #define MAX_N 100000
 #define MAX_K 1000000
 
-#define min(x, y) ((x) < (y) ? (x) : (y))
-
 using namespace std;
 
+struct edgeNode{
+    int w, u, v;
+};
+
 int N, M, s, e;
-vector<pair<int, pair<int, int>>> edges;
+vector<edgeNode> edges;
 int parent[MAX_N + 1], rnk[MAX_N + 1];
 int ans;
+
+bool cmp(edgeNode &a, edgeNode &b){
+    return a.w > b.w;
+}
 
 void makeSet(){
     for(int i=1; i<=N; i++) parent[i] = i;
 }
 int findRoot(int x){
-    if(parent[x] == x) return x;
-    return findRoot(parent[x]);
+    while(parent[x] != x) x = parent[x];
+    return x;
 }
 bool makeUnion(int a, int b){
     int rootA = findRoot(a);
@@ -38,27 +44,17 @@ bool makeUnion(int a, int b){
         ++rnk[rootA];
     }
     
-    return true;
-}
-bool isConnected(){
-    int rootS = findRoot(s);
-    int rootE = findRoot(e);
-    return rootS == rootE;
+    return findRoot(s) == findRoot(e);
 }
 
 void solve(){
-    sort(edges.begin(), edges.end(), greater<>());
+    sort(edges.begin(), edges.end(), cmp);
     makeSet();
     
-    int maxW = MAX_K;
     for(auto curr : edges){
-        if(makeUnion(curr.second.first, curr.second.second)){
-            maxW = min(maxW, curr.first);
-            
-            if(isConnected()){
-                ans = maxW;
-                return;
-            }
+        if (makeUnion(curr.u, curr.v)) {
+            ans = curr.w;
+            return;
         }
     }
     
@@ -74,7 +70,7 @@ int main(){
     int u, v, k;
     for(int i=0; i<M; i++){
         cin >> u >> v >> k;
-        edges.push_back({k, {u, v}});
+        edges.push_back({k, u, v});
     }
     
     solve();
