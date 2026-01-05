@@ -16,6 +16,7 @@ bool cmp(const edgeNode &a, const edgeNode &b){
 int N, M;
 int parent[MAX_N + 1];
 vector<edgeNode> edges;
+int cnt, total;
 int ans;
 
 void makeSet(){
@@ -37,13 +38,18 @@ bool makeUnion(int a, int b){
 }
 
 void solve(){
+    int cost = 0;
     sort(edges.begin(), edges.end(), cmp);
     
     for(auto &curr : edges){
-        if(!makeUnion(curr.u, curr.v)){
-            ans += curr.w;
+        if(cnt >= N - 1) break;
+        if(makeUnion(curr.u, curr.v)){
+            cost += curr.w;
+            ++cnt;
         }
     }
+    
+    ans = total - cost;
     
     return;
 }
@@ -60,8 +66,14 @@ int main(){
     for(int i=0; i<M; i++){
         cin >> a >> b >> c >> d;
         
-        if(d) makeUnion(a, b);
-        else edges.push_back({c, a, b});
+        if(d){
+            makeUnion(a, b);
+            ++cnt;
+        }
+        else {
+            edges.push_back({c, a, b});
+            total += c;
+        }
     }
     
     solve();
