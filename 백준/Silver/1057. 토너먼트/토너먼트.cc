@@ -7,7 +7,7 @@ int main(){
     cin >> N >> a >> b;
     --a; --b;
     
-    int cnt = 0;
+    int cnt = 1;
     while(a >> cnt != b >> cnt) ++cnt;
     
     cout << cnt;
