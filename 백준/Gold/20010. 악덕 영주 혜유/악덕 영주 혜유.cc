@@ -6,35 +6,40 @@
 
 using namespace std;
 
+struct edge{
+    int w, v, prev;
+    bool operator<(const edge& other) const{
+        return w > other.w;
+    }
+};
+
 int N, K;
 vector<pair<int, int>> g[MAX_N], tree[MAX_N];
 int ansMinTotal, ansMaxCost;
 
 void mst(){
     int cost = 0, cnt = 0;
-    priority_queue<pair<int, pair<int, int>>> pq;
+    priority_queue<edge> pq;
     vector<bool> visited(N, false);
     
-    pq.push({0, {0, 0}});
+    pq.push({0, 0, 0});
     
     while(!pq.empty()){
         if(cnt >= N) break;
         
-        int currW = -pq.top().first;
-        int currV = pq.top().second.first;
-        int prevV = pq.top().second.second;
+        edge curr = pq.top();
         pq.pop();
         
-        if(visited[currV]) continue;
+        if(visited[curr.v]) continue;
         
-        visited[currV] = true;
+        visited[curr.v] = true;
         ++cnt;
-        cost += currW;
-        tree[prevV].push_back({currV, currW});
-        tree[currV].push_back({prevV, currW});
+        cost += curr.w;
+        tree[curr.prev].push_back({curr.v, curr.w});
+        tree[curr.v].push_back({curr.prev, curr.w});
         
-        for(auto nxt : g[currV]){
-            if(!visited[nxt.first]) pq.push({-nxt.second, {nxt.first, currV}});
+        for(auto nxt : g[curr.v]){
+            if(!visited[nxt.first]) pq.push({nxt.second, nxt.first, curr.v});
         }
     }
     
@@ -42,7 +47,7 @@ void mst(){
     
     return;
 }
-int bfs1(int start){ // start에서 가장 먼 노드 찾는다.
+pair<int, int> bfs(int start){ // start에서 가장 먼 노드와 그 비용 찾는다.
     queue<pair<int, int>> q;
     vector<bool> visited(N, false);
     int maxDist = -1, maxV = -1;
@@ -68,45 +73,17 @@ int bfs1(int start){ // start에서 가장 먼 노드 찾는다.
         }
     }
     
-    return maxV;
-}
-int bfs2(int start){
-    queue<pair<int, int>> q;
-    vector<bool> visited(N, false);
-    int maxDist = -1, maxV = -1;
-    
-    q.push({start, 0});
-    visited[start] = true;
-    
-    while(!q.empty()){
-        auto curr = q.front();
-        q.pop();
-        
-        for(auto nxt : tree[curr.first]){
-            if(visited[nxt.first]) continue;
-            
-            visited[nxt.first] = true;
-            int ndist = curr.second + nxt.second;
-            q.push({nxt.first, ndist});
-            
-            if(ndist > maxDist){
-                maxDist = ndist;
-                maxV = nxt.first;
-            }
-        }
-    }
-    
-    return maxDist;
+    return {maxV, maxDist};
 }
 
-void lca(){
-    int from = bfs1(0);
-    ansMaxCost = bfs2(from);
+void dia(){ // mst 트리의 지름 구한다. 머리끄댕이
+    int from = bfs(0).first;
+    ansMaxCost = bfs(from).second;
     return;
 }
 void solve(){
     mst();
-    lca();
+    dia();
     return;
 }
 
