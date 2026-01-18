@@ -1,86 +1,63 @@
 #include <iostream>
-#include <cmath>
-#include <string>
+
+#define MAX_N 100000
 
 using namespace std;
 
-int N, P;
-int arr[100001];
-int *tree;
+int N, K;
+int arr[MAX_N];
+int tree[2 * MAX_N];
 
-void makeTree(int node, int start, int end) {
-	if (start == end) {
-		tree[node] = arr[start];
-		return;
-	}
+char signCh[] = {'-', '0', '+'};
 
-	int mid = (start + end) / 2;
-	makeTree(2 * node, start, mid);
-	makeTree(2 * node + 1, mid + 1, end);
-
-	tree[node] = tree[2 * node] * tree[2 * node + 1];
-
-	return;
+void makeTree(){
+    for(int i=0; i<N; i++) tree[N + i] = arr[i];
+    for(int i=N-1; i>0; i--) tree[i] = tree[i << 1] * tree[i << 1 | 1];
+    return;
 }
-void update(int node, int start, int end, int idx, int value) {
-	if (start > idx || end < idx) return; // 아예 범위에 포함되지 X
-	if (start == end) {
-		if (start == idx) tree[node] = value;
-		return;
-	}
-
-	int mid = (start + end) / 2;
-	if (idx >= start && idx <= mid) update(2 * node, start, mid, idx, value);
-	if (idx > mid && idx <= end) update(2 * node + 1, mid + 1, end, idx, value);
-
-	tree[node] = tree[2 * node] * tree[2 * node + 1];
-
-	return;
+void update(int i, int x){
+    tree[i += N] = x;
+    while(i >>= 1) tree[i] = tree[i << 1] * tree[i << 1 | 1];
+    return;
+}
+char query(int l, int r){ // [l, r)
+    int result = 1;
+    for(l += N, r += N; l != r; l >>= 1, r >>= 1){
+        if(l & 1) result *= tree[l++];
+        if(r & 1) result *= tree[--r];
+    }
+    return signCh[result + 1];
 }
 
-int getP(int node, int start, int end, int left, int right) { // 리턴값: -1, 0, 1
-	if (start > right || end < left) return 1; // 아예 범위에 포함되지 X
-	if (start >= left && end <= right) return tree[node]; // 범위에 완전히 포함됨
-
-	int mid = (start + end) / 2;
-	int leftP = getP(2 * node, start, mid, left, right);
-	int rightP = getP(2 * node + 1, mid + 1, end, left, right);
-
-	return leftP * rightP;
-}
-
-int main() {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
-
-	while (cin >> N >> P) {
-		for (int i = 1; i <= N; i++) {
-			cin >> arr[i];
-			arr[i] = (arr[i] > 0 ? 1 : (arr[i] < 0 ? -1 : 0));
-		}
-
-		int h = ceil(log2(N)) + 1;
-		tree = new int[1 << h];
-		makeTree(1, 1, N);
-
-		char q;
-		int a, b;
-		string ans = "";
-		for (int i = 0; i < P; i++) {
-			cin >> q >> a >> b;
-			if (q == 'C') {
-				b = (b > 0 ? 1 : (b < 0 ? -1 : 0));
-				update(1, 1, N, a, b);
-			}
-			else {
-				int res = getP(1, 1, N, a, b);
-				if (res == 0) ans += '0';
-				else ans += (res > 0 ? '+' : '-');
-			}
-		}
-
-		cout << ans << '\n';
-	}
-
-	return 0;
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+    
+    while(cin >> N >> K){
+        for(int i=0; i<N; i++){
+            cin >> arr[i];
+            if(arr[i] > 0) arr[i] = 1;
+            else if(arr[i] < 0) arr[i] = -1;
+        }
+        
+        makeTree();
+        
+        char comm;
+        int a, b;
+        for(int i=0; i<K; i++){
+            cin >> comm >> a >> b;
+            --a;
+            if(comm == 'C'){
+                if(b > 0) b = 1;
+                else if(b < 0) b = -1;
+                update(a, b);
+            }
+            else{
+                cout << query(a, b);
+            }
+        }
+        cout << '\n';
+    }
+    
+    return 0;
 }
