@@ -3,32 +3,33 @@
 #include <queue>
 #include <algorithm>
 
+#define MAX_N 200000
+
 using namespace std;
 
 int N;
-vector<pair<int, int>> arr;
+pair<int, int> arr[MAX_N]; // {컵라면 수, 데드라인}
 int ans;
 
+bool comp(pair<int, int>& a, pair<int, int>& b) { // 데드라인 작은 순
+	return a.second < b.second;
+}
+
 void solve() {
-	sort(arr.begin(), arr.end());
+	sort(arr, arr + N, comp);
 
 	priority_queue<pair<int, int>> pq;
 
-	int t = arr[N - 1].first;
+	int t = arr[N - 1].second + 1;
 	int idx = N - 1;
 
-	while (t) {
-		while (idx >= 0 && arr[idx].first >= t) {
-			pq.push({arr[idx].second, arr[idx].first});
-			idx--;
-		}
-
+	while (--t) {
+		while (idx >= 0 && arr[idx].second >= t) pq.push(arr[idx--]);
+		
 		if (!pq.empty()) {
 			ans += pq.top().first;
 			pq.pop();
 		}
-
-		t--;
 	}
 
 	return;
@@ -39,10 +40,8 @@ int main() {
 	cin.tie(NULL);
 
 	cin >> N;
-	int d, c;
 	for (int i = 0; i < N; i++) {
-		cin >> d >> c;
-		arr.push_back({ d, c });
+		cin >> arr[i].second >> arr[i].first;
 	}
 
 	solve();
