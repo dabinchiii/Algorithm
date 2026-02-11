@@ -1,0 +1,6 @@
+# 2021년도에 잡은 물고기 수를 출력
+# 컬럼명은 'FISH_COUNT' 로 지정
+SELECT COUNT(*) AS FISH_COUNT
+FROM FISH_INFO
+WHERE TIME >= '2021-01-01'
+    AND TIME < '2022-01-01';
