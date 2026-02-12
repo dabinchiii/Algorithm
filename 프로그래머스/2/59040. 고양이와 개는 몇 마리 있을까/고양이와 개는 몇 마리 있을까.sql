@@ -1,0 +1,9 @@
+# 고양이와 개가 각각 몇 마리인지 조회
+# 고양이를 개보다 먼저 조회
+SELECT
+    ANIMAL_TYPE,
+    COUNT(*) AS 'count'
+FROM ANIMAL_INS
+WHERE ANIMAL_TYPE IN ('Cat', 'Dog')
+GROUP BY ANIMAL_TYPE
+ORDER BY FIELD(ANIMAL_TYPE, 'Cat', 'Dog');
