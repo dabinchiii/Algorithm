@@ -1,5 +1,5 @@
 #include <iostream>
-#include <queue>
+#include <deque>
 
 #define MAX_N 5000000
 
@@ -25,7 +25,14 @@ int main(){
     cin >> N >> L;
     for(int i=0; i<N; i++) cin >> arr[i];
     solve();
-    for(int i=0; i<N; i++) cout << ans[i] << ' ';
+    
+    string output;
+    output.reserve(N * 3);
+    for(int i=0; i<N; i++){
+        output += to_string(ans[i]);
+        output += ' ';
+    }
+    cout << output;
     
     return 0;
 }
