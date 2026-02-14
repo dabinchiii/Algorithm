@@ -6,7 +6,8 @@
 using namespace std;
 
 int N, L;
-int arr[MAX_N], ans[MAX_N];
+int arr[MAX_N];
+string ans;
 
 void solve(){
     deque<int> dq;
@@ -14,25 +15,23 @@ void solve(){
         while(!dq.empty() && arr[dq.back()] > arr[e]) dq.pop_back();
         dq.push_back(e);
         while(dq.front() < s) dq.pop_front();
-        ans[e] = arr[dq.front()];
+        ans += to_string(arr[dq.front()]);
+        ans += ' ';
     }
     return;
 }
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
-
+    
+    ans.reserve(N * 3);
+    
     cin >> N >> L;
     for(int i=0; i<N; i++) cin >> arr[i];
+    
     solve();
     
-    string output;
-    output.reserve(N * 3);
-    for(int i=0; i<N; i++){
-        output += to_string(ans[i]);
-        output += ' ';
-    }
-    cout << output;
+    cout << ans;
     
     return 0;
 }
