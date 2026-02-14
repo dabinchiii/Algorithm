@@ -9,12 +9,12 @@ int N, L;
 int arr[MAX_N], ans[MAX_N];
 
 void solve(){
-    deque<pair<int, int>> dq;
+    deque<int> dq;
     for(int s=1-L, e=0; e<N; ++s, ++e){
-        while(!dq.empty() && dq.back().first > arr[e]) dq.pop_back();
-        dq.push_back({arr[e], e});
-        while(dq.front().second < s) dq.pop_front();
-        ans[e] = dq.front().first;
+        while(!dq.empty() && arr[dq.back()] > arr[e]) dq.pop_back();
+        dq.push_back(e);
+        while(dq.front() < s) dq.pop_front();
+        ans[e] = arr[dq.front()];
     }
     return;
 }
