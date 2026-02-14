@@ -9,12 +9,12 @@ int N, L;
 int arr[MAX_N], ans[MAX_N];
 
 void solve(){
-    priority_queue<pair<int, int>> pq;
-    int s = 1 - L;
-    for(int s=1-L,e=0; e<N; ++s, ++e){
-        pq.push({-arr[e], e});
-        while(pq.top().second < s) pq.pop();
-        ans[e] = -pq.top().first;
+    deque<pair<int, int>> dq;
+    for(int s=1-L, e=0; e<N; ++s, ++e){
+        while(!dq.empty() && dq.back().first > arr[e]) dq.pop_back();
+        dq.push_back({arr[e], e});
+        while(dq.front().second < s) dq.pop_front();
+        ans[e] = dq.front().first;
     }
     return;
 }
