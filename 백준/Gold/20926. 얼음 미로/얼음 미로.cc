@@ -26,6 +26,7 @@ int dc[] = {0, 0, -1, 1};
 
 int W, H;
 int board[MAX_H][MAX_W];
+bool isInit[MAX_H][MAX_W];
 vector<gNode> g[MAX_H][MAX_W];
 loc s, e;
 int ans;
@@ -33,44 +34,37 @@ int ans;
 bool isValid(int r, int c){
     return r >= 0 && r < H && c >= 0 && c < W;
 }
-void makeEdge(int sr, int sc, int d){
-    int r = sr, c = sc, nr, nc;
-    int cost = 0;
-    while(true){
-        nr = r + dr[d];
-        nc = c + dc[d];
-        
-        if(!isValid(nr, nc) || board[nr][nc] == HOLE) return;
-        if(board[nr][nc] == ROCK){
-            if(r == sr && c == sc) return; // 처음 위치에서 이동하지 않았음
-            g[sr][sc].push_back({{r, c}, cost});
-            return;
-        }
-        if(nr == e.r && nc == e.c){
-            g[sr][sc].push_back({{nr, nc}, cost});
-            return;
-        }
-        
-        r = nr;
-        c = nc;
-        cost += board[r][c];
-    }
-    return;
-}
-void makeG(){
-    for(int i=0; i<H; i++){
-        for(int j=0; j<W; j++){
-            for(int d=0; d<4; d++){
-                makeEdge(i, j, d);
+void makeEdge(int sr, int sc){
+    isInit[sr][sc] = true;
+    
+    for(int d=0; d<4; d++){
+        int r = sr, c = sc, nr, nc;
+        int cost = 0;
+        while(true){
+            nr = r + dr[d];
+            nc = c + dc[d];
+            
+            if(!isValid(nr, nc) || board[nr][nc] == HOLE) break;
+            if(board[nr][nc] == ROCK){
+                if(r == sr && c == sc) break; // 처음 위치에서 이동하지 않았음
+                g[sr][sc].push_back({{r, c}, cost});
+                break;
             }
+            if(nr == e.r && nc == e.c){
+                g[sr][sc].push_back({{nr, nc}, cost});
+                break;
+            }
+            
+            r = nr;
+            c = nc;
+            cost += board[r][c];
         }
     }
+    
     return;
 }
 
 void solve(){
-    makeG();
-    
     priority_queue<pair<int, pair<int, int>>> pq;
     vector<vector<int>> dist(H, vector<int>(W, INF));
     
@@ -89,6 +83,10 @@ void solve(){
         }
         
         if(dist[r][c] < currT) continue;
+        
+        if(!isInit[r][c]){
+            makeEdge(r, c);
+        }
         
         for(gNode nxt : g[r][c]){
             int nxtT = currT + nxt.cost;
