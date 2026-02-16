@@ -4,6 +4,8 @@
 #define MAX_R 10000
 #define MAX_C 500
 
+#define WALL MAX_R + 1
+
 using namespace std;
 
 struct loc{
@@ -13,9 +15,8 @@ struct loc{
 int dr[] = {1, 0, -1};
 
 int R, C;
-bool isWall[MAX_R][MAX_C];
 int visited[MAX_R][MAX_C];
-bool arrived[MAX_R + 1];
+bool arrived[MAX_R + 2];
 int ans;
 
 void print(){
@@ -23,7 +24,7 @@ void print(){
     
     for(int i=0; i<R; i++){
         for(int j=0; j<C; j++){
-            if(isWall[i][j]) cout << 'x' << ' ';
+            if(visited[i][j] == WALL) cout << 'x' << ' ';
             else cout << visited[i][j] << ' ';
         }
         cout << endl;
@@ -32,12 +33,10 @@ void print(){
 }
 void go(int id, int r, int c){
     stack<loc> st;
-    
     st.push({r, c});
     
     while(!st.empty()){
-        loc curr = st.top();
-        st.pop();
+        loc curr = st.top(); st.pop();
         
         visited[curr.r][curr.c] = id;
         
@@ -52,8 +51,7 @@ void go(int id, int r, int c){
             int nc = curr.c + 1;
             
             if(nr < 0 || nr >= R) continue;
-            if(isWall[nr][nc]) continue;
-            if(arrived[visited[nr][nc]] || visited[nr][nc] == id) continue;
+            if(visited[nr][nc] == id || arrived[visited[nr][nc]]) continue;
             
             st.push({nr, nc});
         }
@@ -62,16 +60,14 @@ void go(int id, int r, int c){
     return;
 }
 void solve(){
-    for(int i=0; i<R; i++){
-        visited[i][0] = i + 1;
-        go(i + 1, i, 0);
-    }
-    
+    for(int i=0; i<R; i++) go(i + 1, i, 0);
     return;
 }
 int main(){
     ios_base::sync_with_stdio(false);
     cin.tie(nullptr);
+    
+    arrived[WALL] = true;
     
     cin >> R >> C;
     
@@ -79,7 +75,7 @@ int main(){
     for(int i=0; i<R; i++){
         cin >> line;
         for(int j=0; j<C; j++){
-            if(line[j] == 'x') isWall[i][j] = true;
+            if(line[j] == 'x') visited[i][j] = WALL;
         }
     }
     
