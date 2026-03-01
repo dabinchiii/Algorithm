@@ -1,30 +1,46 @@
+// 114268KB, 1256ms
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
 
 public class Main{
 	
+	public static int N, K;
+	public static long[] gem;
+	public static int[] bag;
+	public static long ans;
 	
 	public static void main(String[] args) throws Exception {
-		int N = read();
-		int K = read();
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
 		
-		long[] gem = new long[N];
-		int[] bag = new int[K];
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		
+		gem = new long[N];
+		bag = new int[K];
 		
 		long w, v;
 		for(int i=0; i<N; i++) {
-			w = read();
-			v = read();
-			gem[i] = (w << 32) | v; // 상위 32비트: 무게, 하위 32비트: 가
+			st = new StringTokenizer(br.readLine());
+			
+			w = Integer.parseInt(st.nextToken());
+			v = Integer.parseInt(st.nextToken());
+			
+			gem[i] = (w << 32) | v;
 		}
 		
 		for(int i=0; i<K; i++) {
-			bag[i] = read();
+			bag[i] = Integer.parseInt(br.readLine());
 		}
 		
 		// ===== solve =====
 		
-		long ans = 0;
+		ans = 0;
 		
 		Arrays.sort(gem);
 		Arrays.sort(bag);
@@ -39,16 +55,4 @@ public class Main{
 		
 		System.out.println(ans);
 	}
-	
-	static int read() throws Exception {
-        int c;
-        do {
-            c = System.in.read();
-        } while (c <= 32); // 공백, 엔터 무시
-        int n = c & 15;
-        while ((c = System.in.read()) > 32) {
-            n = (n << 3) + (n << 1) + (c & 15); // n * 10 + (c - '0')
-        }
-        return n;
-    }
 }
