@@ -1,57 +1,30 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.PriorityQueue;
-import java.util.StringTokenizer;
-
-class Gem implements Comparable<Gem>{
-	int w, v;
-	
-	public Gem(int w, int v) {
-		this.w = w;
-		this.v = v;
-	}
-
-	@Override
-	public int compareTo(Gem o) { // 보석 무게 기준 오름차
-		return Integer.compare(this.w, o.w);
-	}
-}
 
 public class Main{
 	
-	public static int N, K;
-	public static Gem[] gem;
-	public static int[] bag;
-	public static long ans;
 	
 	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = read();
+		int K = read();
 		
-		N = Integer.parseInt(st.nextToken());
-		K = Integer.parseInt(st.nextToken());
+		long[] gem = new long[N];
+		int[] bag = new int[K];
 		
-		gem = new Gem[N];
-		bag = new int[K];
-		
-		int w, v;
+		long w, v;
 		for(int i=0; i<N; i++) {
-			st = new StringTokenizer(br.readLine());
-			
-			w = Integer.parseInt(st.nextToken());
-			v = Integer.parseInt(st.nextToken());
-			
-			gem[i] = new Gem(w, v);
+			w = read();
+			v = read();
+			gem[i] = (w << 32) | v; // 상위 32비트: 무게, 하위 32비트: 가
 		}
 		
 		for(int i=0; i<K; i++) {
-			bag[i] = Integer.parseInt(br.readLine());
+			bag[i] = read();
 		}
 		
 		// ===== solve =====
 		
-		ans = 0;
+		long ans = 0;
 		
 		Arrays.sort(gem);
 		Arrays.sort(bag);
@@ -60,10 +33,22 @@ public class Main{
 		
 		int idx = 0;
 		for(int i=0; i<K; i++) {
-			while(idx < N && gem[idx].w <= bag[i]) pq.offer(-gem[idx++].v);
+			while(idx < N && (gem[idx] >> 32) <= bag[i]) pq.offer(-(int)gem[idx++]);
 			if(!pq.isEmpty()) ans -= pq.poll();
 		}
 		
 		System.out.println(ans);
 	}
+	
+	static int read() throws Exception {
+        int c;
+        do {
+            c = System.in.read();
+        } while (c <= 32); // 공백, 엔터 무시
+        int n = c & 15;
+        while ((c = System.in.read()) > 32) {
+            n = (n << 3) + (n << 1) + (c & 15); // n * 10 + (c - '0')
+        }
+        return n;
+    }
 }
