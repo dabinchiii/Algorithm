@@ -41,9 +41,9 @@ int main() {
 	cin >> N >> M;
 
 	int parent;
-	cin >> parent;
-	for (int i = 2; i <= N; i++) {
+	for (int i = 1; i <= N; i++) {
 		cin >> parent;
+		if (parent == -1) continue;
 		g[parent].push_back(i);
 	}
 
