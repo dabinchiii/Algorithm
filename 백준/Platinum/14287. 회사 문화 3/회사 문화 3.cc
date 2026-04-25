@@ -58,7 +58,7 @@ int main() {
 		}
 		else {
 			cin >> a;
-			cout << query(in[a], out[a]) << '\n';
+			cout << query(in[a], out[a]) << "\n";
 		}
 	}
 
