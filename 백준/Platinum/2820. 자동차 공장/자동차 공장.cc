@@ -39,12 +39,13 @@ int query(int node, int l, int r, int q) {
 	return res;
 }
 
-void dfs(int root) { // 오일러 경로 생성
+void dfs(int root) { // 오일러 경로 생성 + 초기 월급을 세그트리에 적용
 	stack<pair<int, int>> st;
 	int cnt = 0;
 
 	st.push({ root, 0 });
 	in[root] = ++cnt;
+	update(1, 1, N, cnt, cnt, arr[root]);
 
 	while (!st.empty()) {
 		int curr = st.top().first;
@@ -53,6 +54,7 @@ void dfs(int root) { // 오일러 경로 생성
 		if (idx < (int)g[curr].size()) {
 			int nxt = g[curr][idx++];
 			in[nxt] = ++cnt;
+			update(1, 1, N, cnt, cnt, arr[nxt]);
 			st.push({ nxt, 0 });
 		}
 		else {
@@ -89,7 +91,7 @@ int main() {
 		}
 		else {
 			cin >> a;
-			cout << arr[a] + query(1, 1, N, in[a]) << '\n';
+			cout << query(1, 1, N, in[a]) << '\n';
 		}
 	}
 
