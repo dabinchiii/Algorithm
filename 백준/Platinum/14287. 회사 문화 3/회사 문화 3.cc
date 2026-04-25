@@ -36,7 +36,7 @@ int query(int l, int r) {
 
 int main() {
 	ios_base::sync_with_stdio(false);
-	cin.tie(nullptr);
+	cin.tie(nullptr); cout.tie(nullptr);
 	
 	cin >> N >> M;
 
