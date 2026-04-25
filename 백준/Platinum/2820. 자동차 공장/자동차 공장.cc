@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 
 #define MAX_N 500000
 
@@ -12,14 +13,6 @@ int tree[4 * MAX_N];
 int cnt;
 int in[MAX_N + 1], out[MAX_N + 1];
 vector<int> g[MAX_N + 1];
-
-
-void dfs(int curr) { // 오일러 경로 생성
-	in[curr] = ++cnt;
-	for (int nxt : g[curr]) dfs(nxt);
-	out[curr] = cnt;
-	return;
-}
 
 void update(int node, int l, int r, int ql, int qr, int val) {
 	if (l > qr || r < ql) return;
@@ -44,6 +37,31 @@ int query(int node, int l, int r, int q) {
 	else res += query((node << 1) + 1, mid + 1, r, q);
 
 	return res;
+}
+
+void dfs(int root) { // 오일러 경로 생성
+	stack<pair<int, int>> st;
+	int cnt = 0;
+
+	st.push({ root, 0 });
+	in[root] = ++cnt;
+
+	while (!st.empty()) {
+		int curr = st.top().first;
+		int &idx = st.top().second;
+
+		if (idx < (int)g[curr].size()) {
+			int nxt = g[curr][idx++];
+			in[nxt] = ++cnt;
+			st.push({ nxt, 0 });
+		}
+		else {
+			out[curr] = cnt;
+			st.pop();
+		}
+	}
+
+	return;
 }
 
 int main() {
