@@ -1,6 +1,5 @@
 #include <iostream>
 #include <vector>
-#include <unordered_map>
 
 #define MAX_N 500000
 
@@ -12,7 +11,6 @@ int tree[4 * MAX_N];
 
 int cnt;
 int in[MAX_N + 1], out[MAX_N + 1];
-unordered_map<int, int> inToIdx;
 vector<int> g[MAX_N + 1];
 
 
@@ -62,7 +60,6 @@ int main() {
 	}
 
 	dfs(1);
-	for (int i = 1; i <= N; i++) inToIdx[in[i]] = i;
 
 	char comm;
 	int a, x;
