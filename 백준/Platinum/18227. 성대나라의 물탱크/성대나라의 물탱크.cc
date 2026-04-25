@@ -7,7 +7,7 @@ using namespace std;
 
 int N, Q;
 int root;
-long long tree[4 * MAX_N];
+long long tree[2 * MAX_N + 5];
 
 int cnt;
 int in[MAX_N + 1], out[MAX_N + 1], depth[MAX_N + 1];
@@ -25,26 +25,19 @@ void dfs(int curr, int parent) {
 	return;
 }
 
-void update(int node, int l, int r, int q) {
-	if (l == r) {
-		++tree[node];
-		return;
+void update(int q) {
+	for (tree[q += N] += 1; q > 1; q >>= 1) {
+		tree[q >> 1] = tree[q] + tree[q ^ 1];
 	}
-
-	int mid = (l + r) >> 1;
-	if(q <= mid) update(node << 1, l, mid, q);
-	else update((node << 1) | 1, mid + 1, r, q);
-
-	tree[node] = tree[node << 1] + tree[(node << 1) | 1];
-
 	return;
 }
-long long query(int node, int l, int r, int ql, int qr) {
-	if (l > qr || r < ql) return 0;
-	if (l >= ql && r <= qr) return tree[node];
-
-	int mid = (l + r) >> 1;
-	return query(node << 1, l, mid, ql, qr) + query((node << 1) | 1, mid + 1, r, ql, qr);
+long long query(int l, int r) {
+	long long res = 0;
+	for (l += N, r += N + 1; l < r; l >>= 1, r >>= 1) {
+		if (l & 1) res += tree[l++];
+		if (r & 1) res += tree[--r];
+	}
+	return res;
 }
 int main() {
 	ios_base::sync_with_stdio(false);
@@ -66,8 +59,8 @@ int main() {
 	int comm, a;
 	while (Q--) {
 		cin >> comm >> a;
-		if (comm == 1) update(1, 1, N, in[a]);
-		else cout << depth[a] * query(1, 1, N, in[a], out[a]) << '\n';
+		if (comm == 1) update(in[a]);
+		else cout << depth[a] * query(in[a], out[a]) << '\n';
 	}
 	return 0;
 }
