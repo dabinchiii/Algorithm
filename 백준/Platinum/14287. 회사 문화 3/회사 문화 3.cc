@@ -6,7 +6,7 @@
 using namespace std;
 
 int N, M;
-int tree[4 * MAX_N];
+int tree[2 * MAX_N + 5];
 
 int cnt;
 int in[MAX_N + 1], out[MAX_N + 1];
@@ -19,27 +19,19 @@ void dfs(int curr) {
 	return;
 }
 
-void update(int node, int l, int r, int q, int val) {
-	if (l == r) {
-		tree[node] += val;
-		return;
+void update(int q, int val) {
+	for (tree[q += N] += val; q > 1; q >>= 1) {
+		tree[q >> 1] = tree[q] + tree[q ^ 1];
 	}
-
-	int mid = (l + r) >> 1;
-	if (q <= mid) update(node << 1, l, mid, q, val);
-	else update((node << 1) | 1, mid + 1, r, q, val);
-
-	tree[node] = tree[node << 1] + tree[(node << 1) | 1];
-
 	return;
 }
-int query(int node, int l, int r, int ql, int qr) {
-	if (l > qr || r < ql) return 0;
-	if (l >= ql && r <= qr) return tree[node];
-
-	int mid = (l + r) >> 1;
-
-	return query(node << 1, l, mid, ql, qr) + query((node << 1) | 1, mid + 1, r, ql, qr);
+int query(int l, int r) {
+	int res = 0;
+	for (l += N, r += N + 1; l < r; l >>= 1, r >>= 1) {
+		if (l & 1) res += tree[l++];
+		if (r & 1) res += tree[--r];
+	}
+	return res;
 }
 
 int main() {
@@ -62,11 +54,11 @@ int main() {
 		cin >> comm;
 		if (comm == 1) {
 			cin >> a >> w;
-			update(1, 1, N, in[a], w);
+			update(in[a], w);
 		}
 		else {
 			cin >> a;
-			cout << query(1, 1, N, in[a], out[a]) << '\n';
+			cout << query(in[a], out[a]) << '\n';
 		}
 	}
 
