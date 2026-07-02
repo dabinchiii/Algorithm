@@ -3,12 +3,10 @@
 # 전화번호의 경우 xxx-xxxx-xxxx 같은 형태로 하이픈 문자열(-)을 삽입하여 출력
 # 결과는 회원 ID를 기준으로 내림차순 정렬
 WITH TG AS (
-    SELECT
-        WRITER_ID,
-        COUNT(*) AS CNT
+    SELECT WRITER_ID
     FROM USED_GOODS_BOARD
     GROUP BY WRITER_ID
-    HAVING CNT >= 3
+    HAVING COUNT(*) >= 3
 ),
 
 USER_INFO AS (
