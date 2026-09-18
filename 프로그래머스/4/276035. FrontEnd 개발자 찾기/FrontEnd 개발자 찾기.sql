@@ -1,0 +1,15 @@
+# Front End 스킬을 가진 개발자의 ID, 이메일, 이름, 성 조회
+# 결과는 ID를 기준으로 오름차순 정렬
+WITH FRONTEND AS (
+    SELECT BIT_OR(CODE) AS CODE
+    FROM SKILLCODES
+    WHERE CATEGORY = 'Front End'
+)
+SELECT
+    ID,
+    EMAIL,
+    FIRST_NAME,
+    LAST_NAME
+FROM DEVELOPERS, FRONTEND
+WHERE SKILL_CODE & FRONTEND.CODE != 0
+ORDER BY ID;

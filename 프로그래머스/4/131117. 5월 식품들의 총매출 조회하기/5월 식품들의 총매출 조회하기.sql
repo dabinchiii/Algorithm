@@ -1,0 +1,21 @@
+# 생산일자가 2022년 5월인 식품들의 식품 ID, 식품 이름, 총매출을 조회
+# 결과는 총매출을 기준으로 내림차순 정렬
+# 총매출이 같다면 식품 ID를 기준으로 오름차순 정렬
+WITH TEMP AS (
+    SELECT
+        PRODUCT_ID,
+        SUM(AMOUNT) AS AMOUNT
+    FROM FOOD_ORDER
+    WHERE PRODUCE_DATE >= '2022-05-01'
+        AND PRODUCE_DATE < '2022-06-01'
+    GROUP BY PRODUCT_ID
+)
+SELECT
+    F.PRODUCT_ID,
+    F.PRODUCT_NAME,
+    T.AMOUNT * F.PRICE AS TOTAL_SALES
+FROM TEMP AS T
+JOIN FOOD_PRODUCT AS F
+    ON T.PRODUCT_ID = F.PRODUCT_ID
+ORDER BY TOTAL_SALES DESC,
+    PRODUCT_ID ASC;

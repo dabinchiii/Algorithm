@@ -1,0 +1,20 @@
+# 완료된 중고 거래의 총금액이 70만 원 이상인 사람의 회원 ID, 닉네임, 총거래금액을 조회
+# 결과는 총거래금액을 기준으로 오름차순 정렬
+WITH USER_SALES AS (
+    SELECT
+        WRITER_ID,
+        SUM(PRICE) AS TOTAL_SALES
+    FROM USED_GOODS_BOARD
+    WHERE STATUS = 'DONE'
+    GROUP BY WRITER_ID
+)
+
+SELECT
+    U.USER_ID,
+    U.NICKNAME,
+    S.TOTAL_SALES
+FROM USER_SALES AS S
+JOIN USED_GOODS_USER AS U
+    ON S.WRITER_ID = U.USER_ID
+WHERE S.TOTAL_SALES >= 700000
+ORDER BY S.TOTAL_SALES ASC;
