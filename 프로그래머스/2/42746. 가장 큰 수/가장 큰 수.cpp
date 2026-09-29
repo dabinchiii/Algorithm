@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 
+#define MAX_N 100000
+
 using namespace std;
 
 bool cmp(const string &a, const string &b){
@@ -10,15 +12,16 @@ bool cmp(const string &a, const string &b){
 }
 
 string solution(vector<int> numbers) {
-    vector<string> v;
-    for(int num : numbers) v.push_back(to_string(num));
+    int n = numbers.size();
+    string arr[MAX_N];
+    for(int i=0; i<n; ++i) arr[i] = to_string(numbers[i]);
     
-    sort(v.begin(), v.end(), cmp);
+    sort(arr, arr + n, cmp);
+    
+    if(arr[0] == "0") return "0";
     
     string ans = "";
-    for(string curr : v) ans += curr;
-    
-    if(ans[0] == '0' && ans.back() == '0') return "0";
+    for(int i=0; i<n; ++i) ans += arr[i];
     
     return ans;
 }
