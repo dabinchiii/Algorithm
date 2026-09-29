@@ -6,23 +6,24 @@
 
 using namespace std;
 
-bool cmp(const string &a, const string &b){
-    if(a.size() == b.size()) return a > b;
-    return a + b > b + a;
+int cat(int x, int y){
+    int p = 1;
+    for(int t = y; t > 0; t /= 10) p *= 10;
+    if(y == 0) p = 10;
+    return x * p + y;
+}
+bool cmp(int a, int b){
+    return cat(a, b) > cat(b, a);
 }
 
 string solution(vector<int> numbers) {
-    int n = numbers.size();
-    string arr[MAX_N];
-    for(int i=0; i<n; ++i) arr[i] = to_string(numbers[i]);
+    sort(numbers.begin(), numbers.end(), cmp);
     
-    sort(arr, arr + n, cmp);
-    
-    if(arr[0] == "0") return "0";
+    if(numbers[0] == 0) return "0";
     
     string ans;
-    ans.reserve(n * 4);
-    for(int i=0; i<n; ++i) ans += arr[i];
+    ans.reserve(numbers.size() * 4);
+    for(int curr : numbers) ans += to_string(curr);
     
     return ans;
 }
