@@ -20,7 +20,8 @@ string solution(vector<int> numbers) {
     
     if(arr[0] == "0") return "0";
     
-    string ans = "";
+    string ans;
+    ans.reserve(n * 4);
     for(int i=0; i<n; ++i) ans += arr[i];
     
     return ans;
