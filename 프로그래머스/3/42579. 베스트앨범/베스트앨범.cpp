@@ -6,34 +6,31 @@
 using namespace std;
 
 vector<int> solution(vector<string> genres, vector<int> plays) {
-    int n = genres.size();
-    int maxId = 0;
-    unordered_map<string, int> cnt, id;
-    vector<pair<int, int>> list[100];
+    unordered_map<string, int> cnt;
+    unordered_map<string, vector<int>> list;
     
-    for(int i=0; i<n; i++){
-        string &g = genres[i];
-        int p = plays[i];
-        
-        if(cnt[g] == 0) id[g] = ++maxId;
-            
-        cnt[g] += p;
-        list[id[g]].push_back({-p, i});
+    for(int i=0; i<genres.size(); i++){
+        cnt[genres[i]] += plays[i];
+        list[genres[i]].push_back(i);
     }
     
-    for(int i=1; i<=maxId; i++){
-        sort(list[i].begin(), list[i].end());
-    }
-    
-    vector<pair<int, string>> v;
-    for(auto curr : cnt) v.push_back({curr.second, curr.first});
-    sort(v.begin(), v.end(), greater<>());
+    vector<string> order;
+    for(const auto &curr : cnt) order.push_back(curr.first);
+    sort(order.begin(), order.end(), [&](const string &a, const string &b){
+        return cnt[a] > cnt[b];
+    });
     
     vector<int> ans;
-    for(auto curr : v){
-        int idx = id[curr.second];
-        ans.push_back(list[idx][0].second);
-        if(list[idx].size() > 1) ans.push_back(list[idx][1].second);
+    for(const auto &g : order){
+        vector<int> &v = list[g];
+        
+        sort(v.begin(), v.end(), [&](int a, int b){
+            if(plays[a] != plays[b]) return plays[a] > plays[b];
+            return a < b;
+        });
+        
+        ans.push_back(v[0]);
+        if(v.size() > 1) ans.push_back(v[1]);
     }
     
     return ans;
