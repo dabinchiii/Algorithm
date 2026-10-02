@@ -15,7 +15,7 @@ vector<int> solution(vector<string> genres, vector<int> plays) {
     }
     
     vector<string> order;
-    for(const auto &curr : cnt) order.push_back(curr.first);
+    for(const auto &[g, t] : cnt) order.push_back(g);
     sort(order.begin(), order.end(), [&](const string &a, const string &b){
         return cnt[a] > cnt[b];
     });
