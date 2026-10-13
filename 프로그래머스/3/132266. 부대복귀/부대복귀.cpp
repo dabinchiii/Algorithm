@@ -10,23 +10,22 @@ bool visited[MAX_N + 1];
 int dist[MAX_N + 1];
 
 void bfs(int start){
-    queue<pair<int, int>> q;
+    queue<int> q;
     
-    q.push({start, 0});
+    q.push(start);
     dist[start] = 0;
     visited[start] = true;
     
     while(!q.empty()){
-        int currV = q.front().first;
-        int currD = q.front().second;
+        int currV = q.front();
         q.pop();
         
         for(int nxt : g[currV]){
             if(visited[nxt]) continue;
             
             visited[nxt] = true;
-            dist[nxt] = currD + 1;
-            q.push({nxt, currD + 1});
+            dist[nxt] = dist[currV] + 1;
+            q.push(nxt);
         }
         
     }
