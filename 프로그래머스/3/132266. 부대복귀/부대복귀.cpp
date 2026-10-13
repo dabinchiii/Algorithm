@@ -42,10 +42,9 @@ vector<int> solution(int n, vector<vector<int>> roads, vector<int> sources, int 
     
     bfs(destination);
     
-    vector<int> ans;
-    for(int curr : sources){
-        if(!visited[curr]) ans.push_back(-1);
-        else ans.push_back(dist[curr]);
+    vector<int> ans(sources.size());
+    for(int i=0; i<sources.size(); i++){
+        ans[i] = visited[sources[i]] ? dist[sources[i]] : -1;
     }
     
     return ans;
