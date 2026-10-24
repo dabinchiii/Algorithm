@@ -1,30 +1,36 @@
 #include <bits/stdc++.h>
 
-#define MAX_N 1000000
-
 using namespace std;
 
-int N;
-int dp[MAX_N + 1][2];
-
 int solution(vector<int> money) {
-    N = money.size();
+    int N = money.size();
+    int prev0, prev1, pprev0;
+    int curr0, curr1;
     
-    dp[1][0] = money[0];
-    for(int i=2; i<=N; i++){
-        dp[i][0] = money[i - 1] + max(dp[i - 2][0], dp[i - 1][1]);
-        dp[i][1] = max(dp[i - 1][0], dp[i - 1][1]);
+    pprev0 = prev1 = 0;
+    prev0 = money[0];
+    for(int i=1; i<N; i++){
+        curr0 = money[i] + max(pprev0, prev1);
+        curr1 = max(prev0, prev1);
+        
+        pprev0 = prev0;
+        prev0 = curr0;
+        prev1 = curr1;
     }
     
-    int ans = max(dp[N][1], dp[N - 1][0]);
+    int ans = max(prev1, pprev0);
     
-    dp[1][0] = 0;
-    for(int i=2; i<=N; i++){
-        dp[i][0] = money[i - 1] + max(dp[i - 2][0], dp[i - 1][1]);
-        dp[i][1] = max(dp[i - 1][0], dp[i - 1][1]);
+    pprev0 = prev1 = prev0 = 0;
+    for(int i=1; i<N; i++){
+        curr0 = money[i] + max(pprev0, prev1);
+        curr1 = max(prev0, prev1);
+        
+        pprev0 = prev0;
+        prev0 = curr0;
+        prev1 = curr1;
     }
     
-    ans = max(ans, max(dp[N][0], dp[N][1]));
+    ans = max(ans, max(prev0, prev1));
     
     return ans;
 }
